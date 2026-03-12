@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Network - Debug Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        #debug-console {
+            background: #1e1e1e;
+            color: #00ff00;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .log-entry {
+            margin: 3px 0;
+        }
+        .log-error { color: #ff4444; }
+        .log-warn { color: #ffaa00; }
+        .log-info { color: #4444ff; }
+        .log-success { color: #00ff00; }
+    </style>
+</head>
+<body>
+    <h1>Hospital Network Embed - Debug Test</h1>
+
+    <div id="debug-console">
+        <div class="log-entry log-info">🔍 Debug Console Initialized...</div>
+    </div>
+
+    <h2>Embedded Content Below:</h2>
+
+    <!-- This is where the hospital network will be embedded -->
+    <div id="hospital-network-container"></div>
+
+    <script>
+        // Debug logging function
+        function debugLog(message, type = 'info') {
+            const console = document.getElementById('debug-console');
+            const entry = document.createElement('div');
+            entry.className = `log-entry log-${type}`;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            console.appendChild(entry);
+            console.scrollTop = console.scrollHeight;
+        }
+
+        // Override console methods to capture logs
+        const originalLog = console.log;
+        const originalError = console.error;
+        const originalWarn = console.warn;
+
+        console.log = function(...args) {
+            debugLog(args.join(' '), 'info');
+            originalLog.apply(console, args);
+        };
+
+        console.error = function(...args) {
+            debugLog('ERROR: ' + args.join(' '), 'error');
+            originalError.apply(console, args);
+        };
+
+        console.warn = function(...args) {
+            debugLog('WARN: ' + args.join(' '), 'warn');
+            originalWarn.apply(console, args);
+        };
+
+        debugLog('Loading hospitalListEmbed.js...', 'info');
+
+        // Monitor when script loads
+        window.addEventListener('load', function() {
+            debugLog('Page fully loaded', 'success');
+
+            // Check after a short delay to see what was loaded
+            setTimeout(function() {
+                const container = document.getElementById('hospital-network-container');
+                const tabs = document.querySelectorAll('.hospital-tab');
+                const regions = document.querySelectorAll('.region');
+
+                debugLog(`Container HTML length: ${container.innerHTML.length} characters`, 'info');
+                debugLog(`Tabs found: ${tabs.length}`, tabs.length > 0 ? 'success' : 'error');
+                debugLog(`Regions found: ${regions.length}`, regions.length > 0 ? 'success' : 'error');
+
+                if (tabs.length > 0) {
+                    // Test click handler
+                    debugLog('Testing tab click handlers...', 'info');
+                    tabs.forEach((tab, idx) => {
+                        const hasListener = tab.onclick || tab.__eventListeners;
+                        debugLog(`Tab ${idx} (${tab.dataset.region}): active=${tab.classList.contains('active')}`, 'info');
+                    });
+                }
+
+                if (regions.length > 0) {
+                    regions.forEach((region, idx) => {
+                        const isVisible = region.classList.contains('active') || region.style.display !== 'none';
+                        const computedDisplay = window.getComputedStyle(region).display;
+                        debugLog(`Region ${region.id}: active=${region.classList.contains('active')}, computed display=${computedDisplay}`, 'info');
+                    });
+                }
+
+                // Add test click handlers to see if clicks work
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', function() {
+                        debugLog(`🖱️ Tab clicked: ${tab.dataset.region}`, 'success');
+                    }, true); // Use capture phase to see all clicks
+                });
+            }, 1000);
+        });
+    </script>
+
+    <!-- Load the embed script from local file first for testing -->
+    <script src="./hospitalListEmbed.js" defer></script>
+
+    <!-- Uncomment this to test with CDN instead:
+    <script src="https://cdn.jsdelivr.net/gh/ahmedhadrich/PCIL_Scripts@latest/hospitalListEmbed.js" defer></script>
+    -->
+
+</body>
+</html>
