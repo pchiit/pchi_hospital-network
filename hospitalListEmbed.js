@@ -3,7 +3,7 @@
     ▸ Place this file next to hospitals.html in your GitHub repo.
     ▸ Embed in Webflow:
          <div id="hospital-network-container"></div>
-         <script src="https://cdn.jsdelivr.net/gh/pchiit/pchi_hospital-network@latest/hospitalListEmbed.js" defer></script>
+         <script src="https://cdn.jsdelivr.net/gh/pchiit/pchi_hospital-network/hospitalListEmbed.js" defer></script>
 */
 
 (function () {
