@@ -1,4 +1,4 @@
-/*  hospitalListEmbed.js  – June 2025
+/* hospitalListEmbed.js  – June 2025
     ------------------------------------------------------------
     ▸ Place this file next to hospitals.html in your GitHub repo.
     ▸ Embed in Webflow:
@@ -49,9 +49,7 @@
       if (tabs.length && regions.length) {
         tabs.forEach(tab => {
           tab.addEventListener('click', () => {
-            // Update active tab
             tabs.forEach(t => t.classList.toggle('active', t === tab));
-            // Update active region using class instead of inline style
             regions.forEach(r => {
               r.classList.toggle('active', r.id === 'reg-' + tab.dataset.region);
             });
@@ -67,6 +65,27 @@
         fa.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css';
         document.head.appendChild(fa);
       }
+
+      /* 6. Safety-net Search wiring (เพิ่ม Logic ตรงนี้) */
+      const searchInput = host.querySelector('#searchInput');
+      if (searchInput) {
+        searchInput.addEventListener('keyup', function() {
+          const filterValue = this.value.toLowerCase();
+          // ค้นหาเฉพาะใน host (container) เพื่อไม่ให้กระทบตารางอื่นบน Webflow
+          const rows = host.querySelectorAll('.hospital-table tbody tr:not(.province-header)');
+          
+          rows.forEach(row => {
+            // ดึงข้อมูลชื่อสถานพยาบาลจากคอลัมน์แรก (td index 0)
+            const hospitalName = row.cells[0].textContent.toLowerCase();
+            if (hospitalName.includes(filterValue)) {
+              row.style.display = ''; 
+            } else {
+              row.style.display = 'none'; 
+            }
+          });
+        });
+      }
+
     })
     .catch(err => {
       console.error('hospitalListEmbed:', err);
