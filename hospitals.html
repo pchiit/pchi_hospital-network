@@ -255,6 +255,10 @@
             <h1>Hospital & Clinic Network</h1>
         </div>
 
+        <div style="padding: 16px 16px 0 16px; background-color: #fafafa;">
+            <input type="text" id="searchInput" placeholder="ค้นหาชื่อสถานพยาบาล..." style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px;">
+        </div>
+        
         <div class="hospital-tabs">
             <button class="hospital-tab active" data-region="BANGKOK">BANGKOK</button>
             <button class="hospital-tab" data-region="Suburban">Suburban</button>
@@ -4553,6 +4557,23 @@
                 });
             });
         })();
+
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+            searchInput.addEventListener('keyup', function() {
+                const filterValue = this.value.toLowerCase(); 
+                const rows = document.querySelectorAll('.hospital-table tbody tr:not(.province-header)');
+
+                rows.forEach(row => {
+                    const hospitalName = row.cells[0].textContent.toLowerCase();
+                    if (hospitalName.includes(filterValue)) {
+                        row.style.display = ''; 
+                    } else {
+                        row.style.display = 'none'; 
+                    }
+                });
+            });
+        }
     </script>
 </body>
 </html>
