@@ -256,7 +256,11 @@
         </div>
 
         <div style="padding: 16px 16px 0 16px; background-color: #fafafa;">
-            <input type="text" id="searchInput" placeholder="ค้นหาชื่อสถานพยาบาล..." style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px;">
+            <div style="position: relative; width: 100%;">
+                <i class="fa fa-search" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #888; font-size: 16px; pointer-events: none;"></i>
+        
+                <input type="text" id="searchInput" placeholder="hospital name..." style="width: 100%; padding: 12px 12px 12px 40px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; outline: none; box-sizing: border-box;">
+            </div>
         </div>
         
         <div class="hospital-tabs">
